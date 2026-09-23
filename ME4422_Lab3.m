@@ -124,11 +124,13 @@ a = R*solutionAlpha;
 figure;
 grid on;
 hold on;
+title('Changes in Angular Position, Velocity, and Acceleration of Pinion over time')
 fplot(solutionTheta, [0 10]);
 fplot(solutionOmega, [0 10]);
 fplot(solutionAlpha, [0 10]);
 ylim([-2, 2]);
-legend('\theta', '\omega', '\alpha');
+legend('\theta (rad)', '\omega (rad/s)', '\alpha (rad/s^2)');
+xlabel('Time (s)')
 hold off
 
 
@@ -137,9 +139,11 @@ hold off
 figure;
 grid on;
 hold on;
+title('Changes in Position, Velocity, and Acceleration of Pinion over time')
 fplot(x, [0 10]);
 fplot(v, [0, 10]);
 fplot(a, [0 10]);
 ylim([-0.06, 0.06]);
-legend('x', 'v', 'a');
+legend('x (in)', 'v (in/s)', 'a (in/s^2)');
+xlabel('Time (s)')
 hold off
