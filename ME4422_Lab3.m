@@ -16,7 +16,6 @@ L8 = 3.7; %L2 in my notes (not in slack)
 Lk_3 = 0.55;
 Lk_4 = 1;
 
-
 %Dimensions of platform
 a_platform = 1.32;
 b_platform = 1.25;
@@ -33,9 +32,10 @@ M_E = 1; % Arms(on top of platform)
 M_F = 1; % connecting arm with M_E
 
 %Mass Moment of Inertia
-J_pinion = 1; %Gear
+J_pinion = 1; %Pinion
 J_2 = 1; %What is J_2?
 J_leverarm = 1;
+J_1 = 1;
 
 %Dampers
 D_p1 = 1; %Friction with Pin 1
@@ -64,7 +64,7 @@ M_eq = (1/R^2)*(M_eq2) + (1/3)*(Mk_4); %Lump to k4 (Rotation --> Translation)
 % Moment of Inertia Equivalence -- Pinion's location (Torsional)
 %Comment consistency will be fixed later
 
-J_eq1 = J_pinion + M_E*L1^2; % Lump bar E to pin between bar E and bar F
+J_eq1 = J_1 + M_E*L1^2; % Lump bar E to pin between bar E and bar F
 J_eq2 = J_2 + M_F*L4^2; % Lump bar F to ground
 MJ_eq1 = J_eq2 * 1/(L3^2); % Lump Jeq2 to C
 J_eq3 = (L5^2)*MJ_eq1; % C to A
@@ -91,6 +91,7 @@ k_eq9T = k_eq8R/(L7^2) + k_4; %move to S and add k_4
 k_eq = (R^2)*k_eq9T; %move to pinion
 
 %Damper Equivalence -- Pinion's Location (Torsional)
+%This is most likely wrong, I rushed it, can fix tomorrow morning
 
 D_eq1R = D_B*L6^2 + D_p1; %Lump Platform damper to P, Translation to Rotation
 D_eq2R = D_eq1R + D_p2; %add damper at S 
@@ -133,9 +134,7 @@ legend('\theta (rad)', '\omega (rad/s)', '\alpha (rad/s^2)');
 xlabel('Time (s)')
 hold off
 
-
-%plotting x, v, a between times 0 and 10
-
+%Plotting x, v, a between times 0 and 10
 figure;
 grid on;
 hold on;
