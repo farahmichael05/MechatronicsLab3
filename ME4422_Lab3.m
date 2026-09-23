@@ -100,7 +100,7 @@ D_eq = (D_eq3T)*(R^2) + D_4; %To pinion, Translation --> Rotation
 
 %% Model Solver and Plotting
 
-syms x theta(t)
+syms theta(t)
 
 eqn = J_eq*diff(theta, t, 2) + D_eq*diff(theta, t, 1) +k_eq*theta == AppliedTorque;
 Dtheta = diff(theta, t);
