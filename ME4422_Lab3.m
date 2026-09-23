@@ -139,7 +139,7 @@ hold off
 figure;
 grid on;
 hold on;
-title('Changes in Position, Velocity, and Acceleration of Pinion over time')
+title('Changes in Position, Velocity, and Acceleration of Rack over time')
 fplot(x, [0 10]);
 fplot(v, [0, 10]);
 fplot(a, [0 10]);
