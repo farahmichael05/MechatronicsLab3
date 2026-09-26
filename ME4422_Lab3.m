@@ -2,17 +2,16 @@ clc
 clear
 
 %% Definitions 
-%Everything with 1 is something I don't know the value of
 
 %Lengths (cm)
-L1 = 1;
+L1 = 10;
 L2 = 24.003;
-L3 = 1;
-L4 = 1;
-L5 = 1;
+L3 = 12.7;
+L4 = 9;
+L5 = 10;
 L6 = 1.905;
 L7 = 2.286;
-L8 = 9.398; %L2 in my notes (not in slack)
+L8 = 9.398; 
 Lk_3 = 1.397;
 Lk_4 = 1;
 
@@ -50,7 +49,7 @@ D_B = 9.425;  %Platform
 
 k_3 = 103;
 k_4 = 0.0504 ;
-k_one_half = 1;
+k_one_half = 100;
 
 AppliedTorque = 0.1;
 
@@ -134,7 +133,7 @@ sgtitle('Changes in Angular Position, Velocity, and Acceleration of Pinion over 
 
 subplot(3,1,1)
 fplot(solutionTheta, [0 20],'r', 'LineWidth', 1.2);
-ylim([-0.001, 0.2]);
+ylim([-0.001, 0.15]);
 ylabel('\theta (rad)')
 grid on
 
@@ -157,7 +156,7 @@ sgtitle('Changes in Position, Velocity, and Acceleration of Rack over time')
 
 subplot(3,1,1)
 fplot(x, [0 20],'r', 'LineWidth', 1.2);
-ylim([-0.0001, 0.03])
+ylim([-0.0001, 0.02])
 ylabel('x (cm)')
 grid on
 
