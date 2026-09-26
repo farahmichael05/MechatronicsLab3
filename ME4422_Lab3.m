@@ -4,46 +4,47 @@ clear
 %% Definitions 
 %Everything with 1 is something I don't know the value of
 
-%Lengths (in)
+%Lengths (cm)
 L1 = 1;
-L2 = 9.45;
+L2 = 24.003;
 L3 = 1;
 L4 = 1;
 L5 = 1;
-L6 = 0.75;
-L7 = 0.45;
-L8 = 3.7; %L2 in my notes (not in slack)
-Lk_3 = 0.55;
+L6 = 1.905;
+L7 = 2.286;
+L8 = 9.398; %L2 in my notes (not in slack)
+Lk_3 = 1.397;
 Lk_4 = 1;
 
 %Dimensions of platform
-a_platform = 1.32;
-b_platform = 1.25;
+a_platform = 3.3528;
+b_platform = 3.175;
 
-%Radius (in)
-R = 0.05;
+%Radius (cm)
+R = 0.127;
 
-%Masses (UNITS)
-M_platform = 1;
-M_rack = 1;
-Mk_3 = 1;
-Mk_4 = 1;
-M_E = 1; % Arms(on top of platform)
-M_F = 1; % connecting arm with M_E
+%Masses (grams)
+M_platform = 9.7902;
+M_rack = 7.60;
+Mk_3 = 7.35;
+Mk_4 = 0.29;
+M_E = 0; % negligible
+M_F = 0; % negligible
 
-%Mass Moment of Inertia
-J_pinion = 1; %Pinion
-J_2 = 1; %What is J_2?
-J_leverarm = 1;
-J_1 = 1;
+
+%Mass Moment of Inertia (g*cm^2)
+J_pinion = 0.0021017; %Pinion
+J_DC = 357.17; %Bar DC
+J_leverarm = 8.2429;
+J_AB = 2645.84; %bar AB
 
 %Dampers
-D_P = 1; %Friction with Pin P
-D_R = 1;  %Friction with rack and ground
-D_pin = 1;  %Friction with pinion 
-D_D = 1;  %friction at pivot D
-D_A = 1;  %friction at pivot A
-D_B = 1;  %Platform
+D_P = 0.3016; %Friction with Pin P
+D_R = 0;  %Friction with rack, negligible 
+D_pin = 0; %Friction with pinion, negligible
+D_D = 9.425;  %friction at pivot D
+D_A = 9.425;  %friction at pivot A
+D_B = 9.425;  %Platform
 
 %Spring Stiffness
 
@@ -51,21 +52,25 @@ k_3 = 10.3*10^3;
 k_4 = 5.04;
 k_one_half = 1;
 
-AppliedTorque = 1;
+AppliedTorque = 0.1;
 
 %% Equivalences
 
 %Mass Equivalence -- Spring 2's location (Translational)
 
-M_eq1 = M_platform + M_rack + (1/3)*Mk_3 + 2*(M_E + M_F); %add platform, spring 3, bars E and F (x2) and rack. THIS ASSUMES THEY ALL MOVE AT THE SAME VELOCITY (DOUBLE CHECK)
-M_eq2 = J_pinion + (R^2)*M_eq1; %Lump to Pinion (Translation --> Rotation)
+M_eq1 = (M_platform + (1/3)*Mk_3); %Add mass of platform and spring 3
+JM_eq1 = (M_eq1)*L2^2 + 2*(J_AB); %Lump Meq1 to bar AB (Translation --> Rotation)
+JM_eq2 = JM_eq1*(L3^2)/(L2^2) + 2*J_DC; %lump JMeq1 to bar DC
+JM_eq3 = ((L6/L2)^2)*JM_eq2 + J_leverarm; %lump JMeq2 to the leverarm
+M_eq2 = (JM_eq3)/L6^2 + M_rack; %lump JMeq3 to the rack
+JM_eq4 = (M_eq2*R^2) + J_pinion; %add the pinion (Translation --> Rotation)
 
-M_eq = (1/R^2)*(M_eq2) + (1/3)*(Mk_4); %Lump to k4 (Rotation --> Translation)
+M_eq = (JM_eq4)/R^2 + (1/3)*(Mk_4); %Lump to k4 (Rotation --> Translation)
 
 % Moment of Inertia Equivalence -- Pinion's location (Torsional)
 
-J_eq1 = J_1 + M_E*L1^2; % Lump bar E to pin between bar E and bar F
-J_eq2 = J_2 + M_F*L4^2; % Lump bar F to ground
+J_eq1 = J_AB + M_E*L1^2; % Lump bar E to pin between bar E and bar F
+J_eq2 = J_DC + M_F*L4^2; % Lump bar F to ground
 MJ_eq1 = J_eq2 * 1/(L3^2); % Lump Jeq2 to C
 J_eq3 = (L5^2)*MJ_eq1; % C to A
 MJ_eq2 = (J_eq1 + J_eq3)/(L2^2); %Add Jeq1 and Jeq3 and lump to B
@@ -112,7 +117,6 @@ Dtheta = diff(theta, t);
 %Initial Conditions
 initialCond = [theta(0) == 0, Dtheta(0) == 0];
 
-
 %Solving for theta(t)
 solutionTheta = dsolve(eqn, initialCond);
 solutionOmega = diff(solutionTheta);
@@ -124,28 +128,48 @@ x = R*solutionTheta;
 v = R*solutionOmega;
 a = R*solutionAlpha;
 
-% Plot angular displacement, velocity, and acceleration
+% Angular quantities figure (subplots)
 figure;
-grid on;
-hold on;
-title('Changes in Angular Position, Velocity, and Acceleration of Pinion over time')
-fplot(solutionTheta, [0 10]);
-fplot(solutionOmega, [0 10]);
-fplot(solutionAlpha, [0 10]);
-ylim([-2, 2]);
-legend('\theta (rad)', '\omega (rad/s)', '\alpha (rad/s^2)');
-xlabel('Time (s)')
-hold off
+sgtitle('Changes in Angular Position, Velocity, and Acceleration of Pinion over time')
 
-%Plotting x, v, a between times 0 and 10
-figure;
-grid on;
-hold on;
-title('Changes in Position, Velocity, and Acceleration of Rack over time')
-fplot(x, [0 10]);
-fplot(v, [0, 10]);
-fplot(a, [0 10]);
-ylim([-0.06, 0.06]);
-legend('x (in)', 'v (in/s)', 'a (in/s^2)');
+subplot(3,1,1)
+fplot(solutionTheta, [0 15],'r', 'LineWidth', 1.2);
+ylim([-0.001, 0.0025]);
+ylabel('\theta (rad)')
+grid on
+
+subplot(3,1,2)
+fplot(solutionOmega, [0 15],'b', 'LineWidth', 1.2);
+ylim([-0.05, 0.05]);
+ylabel('\omega (rad/s)')
+grid on
+
+subplot(3,1,3)
+fplot(solutionAlpha, [0 15], 'c', 'LineWidth', 1.2);
+ylim([-0.35, 0.35]);
+ylabel('\alpha (rad/s^2)')
 xlabel('Time (s)')
-hold off
+grid on
+
+% Translational quantities figure (subplots)
+figure;
+sgtitle('Changes in Position, Velocity, and Acceleration of Rack over time')
+
+subplot(3,1,1)
+fplot(x, [0 15],'r', 'LineWidth', 1.2);
+ylim([-0.00005, 0.0003])
+ylabel('x (cm)')
+grid on
+
+subplot(3,1,2)
+fplot(v, [0 15],'b', 'LineWidth', 1.2);
+ylim([-0.005, 0.005]);
+ylabel('v (cm/s)')
+grid on
+
+subplot(3,1,3)
+fplot(a, [0 15],'c', 'LineWidth', 1.2);
+ylim([-0.1, 0.1]);
+ylabel('a (cm/s^2)')
+xlabel('Time (s)')
+grid on
