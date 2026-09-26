@@ -48,8 +48,8 @@ D_B = 9.425;  %Platform
 
 %Spring Stiffness
 
-k_3 = 10.3*10^3;
-k_4 = 5.04;
+k_3 = 103;
+k_4 = 0.0504 ;
 k_one_half = 1;
 
 AppliedTorque = 0.1;
@@ -133,19 +133,19 @@ figure;
 sgtitle('Changes in Angular Position, Velocity, and Acceleration of Pinion over time')
 
 subplot(3,1,1)
-fplot(solutionTheta, [0 15],'r', 'LineWidth', 1.2);
-ylim([-0.001, 0.0025]);
+fplot(solutionTheta, [0 20],'r', 'LineWidth', 1.2);
+ylim([-0.001, 0.2]);
 ylabel('\theta (rad)')
 grid on
 
 subplot(3,1,2)
-fplot(solutionOmega, [0 15],'b', 'LineWidth', 1.2);
-ylim([-0.05, 0.05]);
+fplot(solutionOmega, [0 20],'b', 'LineWidth', 1.2);
+ylim([-0.2, 0.2]);
 ylabel('\omega (rad/s)')
 grid on
 
 subplot(3,1,3)
-fplot(solutionAlpha, [0 15], 'c', 'LineWidth', 1.2);
+fplot(solutionAlpha, [0 20], 'c', 'LineWidth', 1.2);
 ylim([-0.35, 0.35]);
 ylabel('\alpha (rad/s^2)')
 xlabel('Time (s)')
@@ -156,19 +156,19 @@ figure;
 sgtitle('Changes in Position, Velocity, and Acceleration of Rack over time')
 
 subplot(3,1,1)
-fplot(x, [0 15],'r', 'LineWidth', 1.2);
-ylim([-0.00005, 0.0003])
+fplot(x, [0 20],'r', 'LineWidth', 1.2);
+ylim([-0.0001, 0.03])
 ylabel('x (cm)')
 grid on
 
 subplot(3,1,2)
-fplot(v, [0 15],'b', 'LineWidth', 1.2);
-ylim([-0.005, 0.005]);
+fplot(v, [0 20],'b', 'LineWidth', 1.2);
+ylim([-0.03, 0.03]);
 ylabel('v (cm/s)')
 grid on
 
 subplot(3,1,3)
-fplot(a, [0 15],'c', 'LineWidth', 1.2);
+fplot(a, [0 20],'c', 'LineWidth', 1.2);
 ylim([-0.1, 0.1]);
 ylabel('a (cm/s^2)')
 xlabel('Time (s)')
